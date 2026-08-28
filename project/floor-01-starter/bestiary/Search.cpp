@@ -21,6 +21,10 @@
 //               the output for your lab-notes.md.
 
 #include "Search.h"
+#include <cassert>
+#include <algorithm>
+
+using namespace std;
 
 namespace dungeon {
 
@@ -39,8 +43,10 @@ const Monster* linearSearch(const std::vector<Monster>& bestiary,
     //     more for a `Monster` than for an `int`?
     //   - How do you take the address of the element you're looking at?
     //     (Two common idioms. Pick whichever makes your loop read cleanly.)
-    (void)bestiary;
-    (void)name;
+    for (const auto& m : bestiary) {
+        if (m.name == name) return &m;
+
+    }
     return nullptr;
 }
 
@@ -65,34 +71,47 @@ const Monster* binarySearch(const std::vector<Monster>& bestiary,
     //   - Middle index: `(low + high) / 2` is textbook but can overflow for
     //     huge N. `low + (high - low) / 2` is the safe version. Write the
     //     safe one — it's free, and it's a habit worth building.
-    (void)bestiary;
-    (void)name;
+
+    assert(is_sorted(bestiary.begin(), bestiary.end(), [](const Monster& a, const Monster& b) {return a.name < b.name;}));
+
+    size_t low = 0;
+    size_t high = bestiary.size();
+
+    while (low < high) {
+        size_t mid = low + (high - low) / 2;
+
+        const string& here = bestiary[mid].name;
+
+        if (here == name) return &bestiary[mid];
+        else if (here < name) low = mid + 1;
+        else high = mid;
+    }
     return nullptr;
+}
+
+  
+namespace {
+    const Monster* binSearchRec(
+        const vector<Monster>& bestiary, 
+        const string& name,
+        size_t low,
+        size_t high
+    ) {
+        if (low >= high) return nullptr;
+        size_t mid = low + (high - low) / 2;
+        const string& here = bestiary[mid].name;
+        if (here == name) return &bestiary[mid];
+        else if (here < name) {
+            return binSearchRec(bestiary, name, mid + 1, high);
+        }
+       else { return binSearchRec(bestiary, name, low, mid); }
+    }
 }
 
 const Monster* binarySearchRecursive(const std::vector<Monster>& bestiary,
                                      const std::string&         name) {
-    // TODO Floor 1 (Fri): same contract as binarySearch, but recursive.
-    //   Recommended pattern: write a `static` helper in this file with extra
-    //   (low, high) parameters, and have this public function call it with
-    //   the initial range. Same precondition: bestiary must be sorted.
-    //
-    // Think before you type:
-    //   - Every recursion needs a BASE CASE and a RECURSIVE CASE. What is
-    //     the smallest range where you already know the answer without
-    //     looking further? That is your base case.
-    //   - Convince yourself, for each recursive call, that the new range
-    //     is a STRICT SUBSET of the old one. If it isn't, you will recurse
-    //     until the stack blows up. (Try it at N=100,000 if curious.)
-    //   - Why `static` for the helper? It has nothing to do with OOP here.
-    //     Look up "internal linkage" — it keeps the helper private to this
-    //     .cpp, so two files can have `helper(...)` without a link error.
-    //   - After it works: run `benchmark`. Does the recursive version cost
-    //     more per call than the iterative one? A little? A lot? Why might
-    //     that be? Write the answer in lab-notes.md.
-    (void)bestiary;
-    (void)name;
-    return nullptr;
+   
+    return binSearchRec(bestiary, name, 0, bestiary.size());
 }
 
 const Monster* findMonster(const std::vector<Monster>& bestiary,
@@ -105,7 +124,7 @@ const Monster* findMonster(const std::vector<Monster>& bestiary,
     //   - At N=100,000, does it matter? By how much?
     //   - This is a JUDGMENT, not a fact. Whatever you pick, write WHY in
     //     your commit message. That reasoning is the graded artifact.
-    return linearSearch(bestiary, name);
+    return binarySearchRecursive(bestiary, name);
 }
 
 }

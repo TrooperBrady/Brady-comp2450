@@ -26,6 +26,7 @@
 #include <random>
 #include <sstream>
 #include <string>
+#include <vector>
 #include "Bag.h"
 
 namespace dungeon {
@@ -37,12 +38,11 @@ namespace {
 // the RNG with a FIXED value (0xC0FFEE). Determinism matters in a
 // benchmark — students on different machines should be comparing runs
 // on the SAME data, not on different random draws.
-Bag<Item> makeSynthetic(std::size_t n) {
+    Bag<Item> makeSynthetic(std::size_t n) {
     std::mt19937_64 rng(0xC0FFEE);  // 64-bit Mersenne Twister, fixed seed
     std::uniform_real_distribution<double> weightDist(0.1, 50.0);
     std::uniform_int_distribution<int>     valueDist(0, 1000);
 
-    
     Bag<Item> v;
     for (std::size_t i = 0; i < n; ++i) {
         std::ostringstream oss;
@@ -128,7 +128,7 @@ static volatile const void* g_benchSink = nullptr;
 // Notice also that the copy itself is OUTSIDE the timed region
 // (before `t0`). We are measuring the sort, not the memcpy.
 double avgMillis(const Bag<Item>& base,
-                 const std::function<void(Bag<Item>&)>& sortFn,
+    const std::function<void(Bag<Item>&)>& sortFn,
                  std::size_t iterations) {
     double totalMs = 0.0;
     for (std::size_t i = 0; i < iterations; ++i) {
@@ -137,7 +137,7 @@ double avgMillis(const Bag<Item>& base,
         sortFn(v);
         auto t1 = std::chrono::high_resolution_clock::now();
         totalMs += std::chrono::duration<double, std::milli>(t1 - t0).count();
-        if (!v.empty()) g_benchSink = &v[0];          // defeat dead-store elimination
+        if (!v.empty()) g_benchSink = &v[0];         // defeat dead-store elimination
     }
     return totalMs / static_cast<double>(iterations);
 }
@@ -166,16 +166,16 @@ void runSortBenchmark(std::size_t n,
     }
 
     double m  = avgMillis(base,
-                          [&](Bag<Item>& v) { mergeSort(v, kCmpWeight); },
+        [&](Bag<Item>& v) { mergeSort(v, kCmpWeight); } ,
                           iterations);
     double q  = avgMillis(base,
-                          [&](Bag<Item>& v) {
+        [&](Bag<Item>& v) {
                               if (opts.badPivot) badQuicksort(v, kCmpWeight);
                               else               quicksort(v, kCmpWeight);
                           },
                           iterations);
     double s  = avgMillis(base,
-                          [&](Bag<Item>& v) {
+        [&](Bag<Item>& v) {
                               std::sort(v.begin(), v.end(), kCmpWeight);
                           },
                           iterations);

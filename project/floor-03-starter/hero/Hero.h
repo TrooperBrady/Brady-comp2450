@@ -12,8 +12,9 @@
 // (Floor 7, queue), skill tree (Floor 8).
 #pragma once
 #include <string>
-#include "Bag.h"
+#include <vector>
 #include "Item.h"
+#include "Bag.h"
 
 namespace dungeon {
 

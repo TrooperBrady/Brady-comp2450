@@ -45,11 +45,11 @@ public:
     // write loops — vector already knows.
 
     std::size_t size() const {
-       return data_.size();
+        return data_.size();
     }
 
     bool empty() const {
-       return data_.empty();
+        return data_.empty();
     }
 
     // ---- access — unchecked --------------------------------------------
@@ -61,16 +61,11 @@ public:
     // prefer at() (below).
 
     const T& operator[](std::size_t i) const {
-        // TODO Floor 3 (Wed): return element at index i, unchecked.
-        // One-line delegate to the underlying std::vector<T>.
-        (void)i;
-        throw std::logic_error("TODO: Bag::operator[] not yet implemented (Floor 3 Wed)");
+        return data_[i];
     }
 
     T& operator[](std::size_t i) {
-        // TODO Floor 3 (Wed): same as the const version, non-const.
-        (void)i;
-        throw std::logic_error("TODO: Bag::operator[] not yet implemented (Floor 3 Wed)");
+        return data_[i];
     }
 
     // ---- access — checked ----------------------------------------------
@@ -82,21 +77,27 @@ public:
     // game keeps going.
 
     const T& at(std::size_t i) const {
-       return data_[i];
+        if (i >= size()) {
+            throw BagException(i, size());
+        }
+        return data_[i];
     }
 
     T& at(std::size_t i) {
-       return data_[i];
+        if (i >= size()) {
+            throw BagException(i, size());
+        }
+        return data_[i];
     }
 
     // ---- mutation ------------------------------------------------------
 
     void push_back(const T& value) {
-       data_.push_back(value);
+        data_.push_back(value);
     }
 
     void clear() {
-       data_.clear();
+        data_.clear();
     }
 
     // ---- iteration -----------------------------------------------------
@@ -114,16 +115,16 @@ public:
     using const_iterator = typename std::vector<T>::const_iterator;
 
     iterator begin() {
-       return data_.begin();
+        return data_.begin();
     }
     iterator end() {
-       return data_.end();
+        return data_.end();
     }
     const_iterator begin() const {
-      return data_.begin();
+        return data_.begin();
     }
     const_iterator end() const {
-       return data_.end();
+        return data_.end();
     }
 
 private:

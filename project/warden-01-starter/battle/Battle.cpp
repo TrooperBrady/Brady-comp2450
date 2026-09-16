@@ -83,16 +83,45 @@ constexpr int kWardenStartHP   = 50;
 constexpr int kPlayerAttackDmg = 6;   // damage per Attack action
 constexpr int kWardenAttackDmg = 4;   // warden's retaliation damage
 
-}  // anonymous namespace
+enum class MenuAction {Attack, Useitem, Inspect, Flee};
+
+struct MenuSelection {
+    int  number;
+    std::string label;
+    MenuAction action;
+
+};
+
+
+}  
 
 BattleOutcome runWardenBattle(Hero& hero) {
     // TODO — write the boss battle. Suggested outline (yours to refactor):
-    //
-    //   int playerHP = kPlayerStartHP;
-    //   int wardenHP = kWardenStartHP;
-    //
-    //   while (playerHP > 0 && wardenHP > 0) {
-    //       print state (HPs, last action — your choice).
+    
+       int adventureHP = kPlayerStartHP;
+       int bossHP = kWardenStartHP;
+       int selectionNumber;
+
+       Bag<MenuSelection> menu;
+       menu.push_back({1, "Attack",    MenuAction::Attack});
+       menu.push_back({2, "Useitem", MenuAction::Useitem});
+       menu.push_back({3, "Inspect", MenuAction::Inspect});
+       menu.push_back({4, "Flee", MenuAction::Flee});
+
+
+       while (adventureHP > 0 && bossHP > 0) {
+
+        
+        try {
+            
+        }
+        catch (...) {
+
+        }
+
+       }
+
+   
     //
     //       try {
     //           show menu (using your F0 container of actions).
@@ -126,6 +155,14 @@ BattleOutcome runWardenBattle(Hero& hero) {
     // depends on is just runWardenBattle(Hero&).
     //
     // Replace the placeholder body below.
+
+    if (bossHP < 0) {
+        std::cout << "Warden is defeated, you have Won!\n";
+    }
+    else {
+        std::cout << "The Warden has defeated you, you Lose!\n";
+    }
+    
 
     (void)hero;
     std::cout << "  (Battle scaffold — runWardenBattle is not yet written.)\n"

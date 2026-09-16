@@ -1,10 +1,5 @@
-// COMP 2450 — Floor 2 starter
-// bestiary/Search.cpp — reference implementation from Floor 1.
-//
-// This file IS already done. You wrote it last week (or something like it);
-// the starter ships the reference version so the `search` command still
-// works while you focus on Floor 2. Read it as a worked example — every
-// choice below is defensible, and the comments say WHY.
+// COMP 2450 — Floor 2
+// bestiary/Search.cpp — completed reference implementation (from Floor 1).
 
 #include "Search.h"
 

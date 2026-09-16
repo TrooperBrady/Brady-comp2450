@@ -1,5 +1,7 @@
 # Floor 2 Starter — *The Sorting Crucible*
 
+> **Catch-up copy — the code here is already complete.** The TODOs described below are filled in. Read the instructions, then read the code that satisfies them.
+
 This is the Floor 2 starter for **COMP 2450 — The Descent**. Drop the contents into a new folder; this starter is **self-contained** and includes a reference version of your Floor 1 search code so the Bestiary still works while you focus on sorting this week.
 
 You now have **one program** — `the_descent` — that does everything you've unlocked so far.

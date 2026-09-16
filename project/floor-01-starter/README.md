@@ -1,5 +1,7 @@
 # Floor 1 Starter — *The Scrying Well*
 
+> **Catch-up copy — the code here is already complete.** The TODOs described below are filled in. Read the instructions, then read the code that satisfies them.
+
 This is the Floor 1 starter for **COMP 2450 — The Descent**. Drop the contents into your project repo (alongside Floor 0 work, in a sibling folder or as the new state of `main.cpp` — your call; the rule is *one repo grown over the semester*).
 
 ## What this program does — once you finish your work

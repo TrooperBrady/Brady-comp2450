@@ -1,5 +1,7 @@
 # Floor 0 Starter — *The Antechamber*
 
+> **Catch-up copy — the code here is already complete.** The TODOs described below are filled in. Read the instructions, then read the code that satisfies them.
+
 This is the starter code for your semester-long dungeon-crawler project. By the end of the semester, this folder's descendants will be a full game. This week, it does almost nothing. That's the point.
 
 ## What this program does

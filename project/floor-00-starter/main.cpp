@@ -6,30 +6,28 @@
 
 #include <iostream>
 #include <string>
-using namespace std;
 
 int main() {
-    cout << "\n=== THE ANTECHAMBER ===\n\n";
-    cout << "A torch sputters. The air smells of iron.\n";
-    cout << "What is your name, adventurer? ";
+    std::cout << "\n=== THE ANTECHAMBER ===\n\n";
+    std::cout << "A torch sputters. The air smells of iron.\n";
+    std::cout << "What is your name, adventurer? ";
 
-    string hero_name;
-    getline(cin, hero_name);
+    std::string hero_name;
+    std::getline(std::cin, hero_name);
 
     if (hero_name.empty()) {
         hero_name = "Nameless One";
     }
 
-    // TODO Floor 0: replace this string with your own flavor line.
-    // Anything a brave (or doomed) adventurer might mutter on descending.
-    const string flavor = "You will face many challenges adventurer. Be prepared or you will perish ";
+    // Floor 0's one task, done. Swap this line for your own.
+    const std::string flavor = "Better a torch in hand than a map in memory.";
 
-    cout << "\nWelcome, " << hero_name << ".\n";
-    cout << flavor << "\n\n";
-    cout << "The stair to Floor 1 awaits. Press Enter to rest.\n";
+    std::cout << "\nWelcome, " << hero_name << ".\n";
+    std::cout << flavor << "\n\n";
+    std::cout << "The stair to Floor 1 awaits. Press Enter to rest.\n";
 
-    string _;
-    getline(cin, _);
+    std::string _;
+    std::getline(std::cin, _);
 
     return 0;
 }

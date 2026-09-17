@@ -113,13 +113,63 @@ BattleOutcome runWardenBattle(Hero& hero) {
 
         
         try {
-            
+            printMenu(menu, adventureHP, bossHP);
+            switch (readMenuChoice(menu)) {
+                case MenuAction::Attack: {
+                    bossHP -= kPlayerAttackDmg;
+                    std::cout << " You swung your sword and gave " << kPlayerAttackDmg << " damage. Warden HP -> " << std::max(bossHP, 0) << ".\n";
+                    hero.eventLog.push_front(
+                        "you swung for " + std::to_string(kPlayerAttackDmg));
+                    if (bossHP > 0) {
+                        adventureHP -= kWardenAttackDmg;
+                        std::cout << " The Warden strikes back for " << kWardenAttackDmg 
+                        << ". Your HP -> " << std::max(adventureHP, 0) << ".\n";
+                        hero.eventLog.push_front(
+                            "the Warden struck for " + std::to_string(kWardenAttackDmg));
+                        
+                    }
+                    break;
+                }
+                case MenuAction::UseItem: {
+                    useItem(hero, adventureHP);
+                    if (bossHP > 0 && adventureHP > 0) {
+                        adventureHP -= kWardenAttackDmg;
+                        std::cout << " While you fumble arounded the Warden strikes. Your HP ->"
+                        << std::max(adventureHP, 0) << ".\n";
+                        hero.eventLog.push_front(
+                            "The Warden attacked for " + std::to_string(kWardenAttackDmg));
+                        
+
+                    }
+                    break;
+                }
+                case MenuAction::Inspect {
+                    std::cout << " Warden of the Floor. HP" << bossHP << " / " << kWardenStartHP
+                    << ". Warden looks to have no visible weakness.  (free action)\n";
+
+                    break;
+
+                }
+                case MenuAction::Flee {
+                    hero.eventLog.push_front("battle warden - fled");
+                    return BattleOutcome::Fled;
+                }
+            }
         }
-        catch (...) {
+        catch (const BagException& e) {
+            std::cout << " " << e.what() << " - try again.\n";
+
 
         }
 
        }
+
+       if (bossHP <= 0) {
+        hero.eventLog.push_front("battle warden - outcome: Victory");
+        return BattleOutcome::Victory;
+       }
+       hero.eventLog.push_front("battle warden - outcome: Defeat");
+       return BattleOutcome::Defeat;
 
    
     //
@@ -156,12 +206,7 @@ BattleOutcome runWardenBattle(Hero& hero) {
     //
     // Replace the placeholder body below.
 
-    if (bossHP < 0) {
-        std::cout << "Warden is defeated, you have Won!\n";
-    }
-    else {
-        std::cout << "The Warden has defeated you, you Lose!\n";
-    }
+    
     
 
     (void)hero;

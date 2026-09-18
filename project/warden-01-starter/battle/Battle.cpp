@@ -19,12 +19,15 @@ namespace dungeon {
 namespace {
 
 
-
+// constexpre means these values are compile-time constants
+// k prefix --> means constant 
 constexpr int kPlayerStartHP   = 30;
 constexpr int kWardenStartHP   = 50;
 constexpr int kPlayerAttackDmg = 6;   // damage per Attack action
 constexpr int kWardenAttackDmg = 4;   // warden's retaliation damage
 
+// enum creates a set of named choices
+// enum class, keeps our names scoped
 enum class MenuAction {Attack, Useitem, Inspect, Flee};
 
 struct MenuSelection {
@@ -36,8 +39,10 @@ struct MenuSelection {
 
 
 void printMenu(const Bag<MenuSelection>& menu, int adventureHP, int bossHP) {
-    std::cout <<"\n Your turn --  your HP " << adventureHP << "  Warden HP " << bossHP << "\n";
+    std::cout <<"\n -- Your turn --  your HP " << adventureHP << "  Warden HP " << bossHP << "\n";
     for (std::size_t i = 0; i < menu.size(); ++i) {
+        // bag overload our operator[], allow menu[i]
+        // to retrieve our menuoption at index i
     std::cout << "  " << menu[i].number << ". " << menu[i].label << "\n";
     }
     std::cout << " > ";
@@ -45,49 +50,75 @@ void printMenu(const Bag<MenuSelection>& menu, int adventureHP, int bossHP) {
 
 }  
 
+//read the user's input and convert that into a MenuAction
 MenuAction readMenuChoice(const Bag<MenuSelection>& menu) {
     std::string line;
+    // getline will get the entire line up to the enter key
+    // if getline fails, standard input may have been closed
+    // if problem flee!
     if (!std::getline(std::cin, line)) {
         return MenuAction::Flee;
     }
     int n = -1;
     try {n = std::stoi(line); }
+    // "2" -> 2
+    // if the string can't be converted
+    // stoi throw an excp
     catch (...) {
-        throw BagException(
-            static_cast<std::size_t>(menu.size() + 1),
-            menu.size());
+        // catch any exception type
+        // we will replace our low-level stoi exception with a domain-specific
+        // BattleException
+        
+        throw BattleException(
+            "'" + line + " ' is not a menu number (enter 1 to " + std::to_string(menu.size()) + ")"
+        );
         
     }
+//search our menu for an option whose displayed number matches the number entered by the player
+    
     for (std::size_t i = 0; i < menu.size(); i++) {
         if (menu[i].number == n) return menu[i].action;
     }
+    // the input was numeric but it did not match a menu option
     throw BagException(static_cast<std::size_t>(n), menu.size());
 }
 
 
+//handle the player's "use item" action
+// Hero& will give the function access to the original hero object instead of a copy
+
 void useItem(Hero& hero, int& adventureHP) {
+    // handle empty inventory case
     if (hero.inventory.empty()) {
-        std::cout << " Your backpack has nothing in it.\n";
+        std::cout << " Your backpack has nothing in it. Maybe you should have taken the offer for a bigger backpak before you came here.\n";
         return;
     }
 
+    // sort hero's inventory from highest to lowest
     sortInventory(hero, "value desc");
     std::cout << " Choose the item you want by its name:\n";
     printInventory(hero);
     std::cout << " > ";
 
     std::string name;
+    // || short circuit
+    // 1. try to read the line
+    // 2. if that succeeds, then i will check whether the lien is empty
+    // if either conidtion is true, the player does nothing
     if (!std::getline(std::cin, name) || name.empty()) {
         std::cout << " You didn't do anything from fear overwhelming you.\n";
         return;
     }
 
+    // findByName<Item> <-- function-template specialization
+    // <Item> will tell the compiler this serach will operate on Item objects
     const Item* it = findByName<Item>(hero.inventory, name);
     if (!it) {
-        throw BagException(0, hero.inventory.size());
+        throw BattleException( "no item found '" + name + "' in your backpack");
     }
 
-    if (it->name.find("Potion") != std::string::npos) {
+    if (it->name.find("otion") != std::string::npos) {
+        // heal 12 hp, but we also don't need healing to exceed max health
         adventureHP = std::min(adventureHP + 12, kPlayerStartHP);
         std::cout << " You drink a red bottle " << it->name << ". HP is now " << adventureHP << ".\n";
 
@@ -99,10 +130,10 @@ void useItem(Hero& hero, int& adventureHP) {
 
 BattleOutcome runWardenBattle(Hero& hero) {
     
-    
+        // player and warden health
        int adventureHP = kPlayerStartHP;
        int bossHP = kWardenStartHP;
-       int selectionNumber;
+       
 
 
        Bag<MenuSelection> menu;
@@ -113,12 +144,14 @@ BattleOutcome runWardenBattle(Hero& hero) {
 
        hero.eventLog.push_front("Battle Warden - engaged");
 
-
+        //battle continues while both are alive
        while (adventureHP > 0 && bossHP > 0) {
 
         
         try {
             printMenu(menu, adventureHP, bossHP);
+            // readMenuChoice returns a MenuAction
+            // switch statement to select the corresp block of code
             switch (readMenuChoice(menu)) {
                 case MenuAction::Attack: {
                     bossHP -= kPlayerAttackDmg;
@@ -161,7 +194,7 @@ BattleOutcome runWardenBattle(Hero& hero) {
                 }
             }
         }
-        catch (const BagException& e) {
+        catch (const BattleException& e) {
             std::cout << " " << e.what() << " - try again.\n";
 
 

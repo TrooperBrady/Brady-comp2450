@@ -78,7 +78,7 @@ void useItem(Hero& hero, int& adventureHP) {
 
     std::string name;
     if (!std::getline(std::cin, name) || name.empty()) {
-        std::cout << " You didn't do anything from fear overwheling you.\n";
+        std::cout << " You didn't do anything from fear overwhelming you.\n";
         return;
     }
 
@@ -150,7 +150,7 @@ BattleOutcome runWardenBattle(Hero& hero) {
                 }
                 case MenuAction::Inspect: {
                     std::cout << " Warden of the Floor. HP" << bossHP << " / " << kWardenStartHP
-                    << ". Warden looks to have no visible weakness.  (free action)\n";
+                    << ". Warden looks to be wearing heavy armor and you can't seem to spot any weaknesses.  (free action)\n";
 
                     break;
 

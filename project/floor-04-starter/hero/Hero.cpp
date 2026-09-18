@@ -79,7 +79,7 @@ void printInventory(const Hero& hero) {
 // and `log` doesn't crash on day zero. Replace it.
 void printLog(const Hero& hero, std::size_t n) {
    if (hero.eventLog.empty()) {
-    cout << "The chain is empty - nothing to remember yet.\n";
+    std::cout << "The chain is empty - nothing to remember yet.\n";
     return;
    }
    size_t printed = 0;
@@ -87,9 +87,9 @@ void printLog(const Hero& hero, std::size_t n) {
     p != nullptr && (n == 0 || printed < n);
     p = p->next, ++printed) {
 
-    cout << " " << setw(2) << right << (printed + 1) << ". " << p->data << "\n";
+    std::cout << " " << setw(2) << right << (printed + 1) << ". " << p->data << "\n";
    }
-   cout << " (newest first; chain length << " << hero.eventLog.size() << ")\n";
+   std::cout << " (newest first; chain length << " << hero.eventLog.size() << ")\n";
 }
 
 }  // namespace dungeon

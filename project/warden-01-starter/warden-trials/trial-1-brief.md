@@ -34,13 +34,19 @@ AI is welcome to *check* your answers; it is not welcome to *write your sentence
 
 ```cpp
 // by healing power — i.e. by value
-auto byValue  = /* your lambda */;
+auto byValue  = [](const Item& a, const Item& b) {
+return a.value > b.value; 
+};
+
 
 // by weight
-auto byWeight = /* your lambda */;
+auto byWeight = [](const Item& a, const Item& b) {
+return a.weight < b.weight;
+};
 ```
 
 (one-sentence answer — what language feature?)
+Language feature should be lamdbas since that is what it tells how the hte output is going to be ordered a certain way
 
 ---
 

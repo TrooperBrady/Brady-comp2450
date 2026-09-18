@@ -12,15 +12,20 @@ Example entries:
 ## Trial I — The Foundations Brief
 
 (your declaration)
+I used Chatgpt to help me figure out what I did wrong on question 3
 
 ## Trial II — The Critique
 
 This trial **requires** AI use. The full prompt + reply + critique are in `trial-2-critique.md`. If you used a different LLM for any other reason on this trial (e.g., to look up syntax), declare it here:
 
+
 (your declaration)
+AI was required for this trial to help me answer the question and I used Chatgpt
 
 ## Trial III — The Encounter
 
 (your declaration)
+
+I did not use AI in trial 3 at all
 
 The two functions in your battle code that you wrote *without* AI assistance are named in `encounter-notes.md`. Friday's quiz pulls from those.

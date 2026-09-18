@@ -11,13 +11,15 @@
 #include <string>
 
 #include "Bag.h"
+#include "Chain.h"
 #include "Item.h"
 
 namespace dungeon {
 
 struct Hero {
     std::string heroName;
-    Bag<Item>   inventory;     // post-Floor-3: Bag<Item>, not std::vector<Item>
+    Bag<Item>   inventory;
+    Chain<std::string>  eventLog;     // post-Floor-3: Bag<Item>, not std::vector<Item>
 };
 
 // Load a starting inventory from a pipe-delimited text file.

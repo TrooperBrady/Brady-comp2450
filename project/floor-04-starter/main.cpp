@@ -73,6 +73,8 @@ int main() {
     std::cout << "What is your name, adventurer? ";
     Hero hero;
     std::getline(std::cin, hero.heroName);
+   
+
     if (hero.heroName.empty()) hero.heroName = "Nameless One";
 
     std::cout << "\nWelcome, " << hero.heroName << ".\n"

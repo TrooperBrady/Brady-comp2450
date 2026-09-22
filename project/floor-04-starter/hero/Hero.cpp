@@ -87,9 +87,9 @@ void printLog(const Hero& hero, std::size_t n) {
     p != nullptr && (n == 0 || printed < n);
     p = p->next, ++printed) {
 
-    std::cout << " " << setw(2) << right << (printed + 1) << ". " << p->data << "\n";
+    std::cout << " " << std::setw(2) << std::right << (printed + 1) << ". " << p->data << "\n";
    }
-   std::cout << " (newest first; chain length << " << hero.eventLog.size() << ")\n";
+   std::cout << " (newest first; chain length " << hero.eventLog.size() << ")\n";
 }
 
 }  // namespace dungeon

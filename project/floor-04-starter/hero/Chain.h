@@ -162,16 +162,18 @@ public:
     // Walk and delete every node. Leaves the chain empty.
     //
     // TODO Floor 4 (Wednesday). Same loop as the destructor.
-    void clear() {
-        Nod* p = head_;
-        while (p != nullprt) {
-            Node* n = p->next // save before I delete
-            delete p; // freeing the current node
-            p = n; // advance to the next saved
-        }
-        head_ = nullptr; // chain is gone
-        size_ 0; // so size is 0
+   void clear() {
+    Node* p = head_;
+
+    while (p != nullptr) {
+        Node* n = p->next;  // save before deleting
+        delete p;           // free the current node
+        p = n;              // advance to the next saved node
     }
+
+    head_ = nullptr;
+    size_ = 0;
+}
 
 private:
     Node*       head_ = nullptr;

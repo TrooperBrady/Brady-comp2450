@@ -101,13 +101,12 @@ void printLogOldest(const Hero& hero, std::size_t n) {
     return;
   }
   std::size_t printed = 0;
-  for (const auto& p = hero.eventLog.tail();
-       p != nullptr && (n == 0 || printed < n);
-       p = p->prev, ++printed) {
-        std::cout << " " << std::setw(2) << std::right << (printed + 1) << ". " << p-> data << "\n";
-
-       }
-       std::cout << "oldest first; chain length" << hero.eventLog.size() << ".\n";
+  for (auto p = hero.eventLog.tail();
+     p != nullptr && (n == 0 || printed < n);
+     p = p->prev, ++printed) {
+    std::cout << " " << std::setw(2) << std::right
+              << (printed + 1) << ". " << p->data << "\n";
+}
 }
 
 }  // namespace dungeon

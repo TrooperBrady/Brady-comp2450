@@ -121,9 +121,11 @@ public:
     //
     // Leaving this empty means a copy of a chain is silently empty.
     // The `clone hero` command will demonstrate the bug.
-    Chain(const Chain& /*other*/) {
-        // TODO Wednesday — deep copy.
-    }
+   Chain(const Chain& other) {
+    head_ = other.head_;
+    tail_ = other.tail_;
+    size_ = other.size_;
+}
 
     // TODO Floor 4½ (Friday) — implement copy assignment.
     //
@@ -151,9 +153,12 @@ public:
     //
     // Pick one. Defend it in your lab notes.
     Chain& operator=(const Chain& other) {
+        if (this == &other) return *this;
+        clear();
         for (const Node* p = other.head_; p != nullptr; p = p->next) {
             push_back(p->data);
         }
+        return *this;
     }
 
     // Member swap — useful for copy-and-swap, useful for nothing else.
@@ -214,8 +219,8 @@ public:
     //     tail_ = n;
     //     ++size_;
     void push_back(const T& value) {
-        Node* n new Node(value, tail_, nullptr);
-        if (tail_ != nullprt) tail_->next = n;
+        Node* n = new Node(value, tail_, nullptr);
+        if (tail_ != nullptr) tail_->next = n;
         else head_ = n;
         tail_ = n;
         ++size_;
@@ -231,7 +236,14 @@ public:
     //      If it IS null, the chain is now empty — set tail_ = nullptr too.
     //   5. --size_.
     void pop_front() {
-        // TODO Friday
+        if (head_ == nullptr) return;
+        Node* old_head = head_;
+        Node* new_head = old_head->next;
+        delete old_head;
+        head_ = new_head;
+        if (new_head != nullptr) new_head->prev = nullptr;
+        else tail_ = nullptr;
+        --size_;
     }
 
     // TODO Floor 4½ (Friday) — remove the back node. O(1) BECAUSE of prev.
@@ -247,7 +259,14 @@ public:
     // Question for the lab: why is this O(n) on a singly-linked chain
     // *even if it has a tail_ pointer*?
     void pop_back() {
-        // TODO Friday
+        if (tail_ == nullptr) return;
+        Node* old_tail = tail_;
+        Node* new_tail = old_tail->prev;
+        delete old_tail;
+        tail_ = new_tail;
+        if (new_tail != nullptr) new_tail->next;
+        else head_ = nullptr;
+        --size_;
     }
 
     // Walk and delete every node. Floor 4 version — unchanged loop body,

@@ -94,7 +94,7 @@ public:
         // TODO Floor 5 (Monday) — advance to the next node.
         //   pre-increment:    p_ = p_->next;  return *this;
         //   post-increment:   iterator tmp = *this;  ++(*this);  return tmp;
-        iterator& operator++()    { p_ = p_->next; return *this}
+        iterator& operator++()    { p_ = p_->next; return *this; }
         iterator  operator++(int) { iterator t = *this; ++(*this); return t; }
 
         // TODO Floor 5 (Friday) — retreat to the previous node.  Needed
@@ -107,7 +107,7 @@ public:
         //
         //   pre-decrement:    p_ = p_ ? p_->prev : owner_->tail_;  return *this;
         //   post-decrement:   iterator tmp = *this;  --(*this);  return tmp;
-        iterator& operator--()     { p_ = p_ ? p_->prev : owner_->tail_; return *thisl }
+        iterator& operator--()     { p_ = p_ ? p_->prev : owner_->tail_; return *this; }
         iterator  operator--(int) { iterator t = *this; --(*this); return t;   }
 
         // TODO Floor 5 (Monday) — compare the underlying Node*.

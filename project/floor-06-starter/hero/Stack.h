@@ -62,7 +62,7 @@ public:
     // TODO Floor 6 (Monday). Body is one line.
     //     chain_.push_front(value);
     void push(const T& value) {
-        chain_.push_front(value);
+       chain_.push_front(value);
     }
 
     // Remove the top of the stack. O(1). No-op on empty (matches std::stack
@@ -72,7 +72,7 @@ public:
     // TODO Floor 6 (Monday). Body is one line.
     //     chain_.pop_front();
     void pop() {
-        chain_.pop_front();
+       chain_.pop_front();
     }
 
     // Read the top of the stack. O(1). PROVIDED — you do not write this.
@@ -111,7 +111,7 @@ public:
     }
 
 private:
-    Chain<T> chain_;
+   Chain<T> chain_;
 };
 
 }  // namespace dungeon

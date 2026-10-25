@@ -156,20 +156,26 @@ public:
     //         for (std::size_t i = 0; i < cur->children.size(); ++i)
     //             q.enqueue(cur->children[i]);
     //     }
-    std::vector<T> levelOrder() const {
-        std::vector<T> out;
-        if (root == nullptr) return out;
-        Queue<Node*> q;
-        q.enqueue(root_); 
-        while (!q.empty()) {
-            Node* cur = q.front(); 
-            q.dequeue();
-            out.push_back(cur->data);
-            for (std::size_t i = 0; i < cur->children.size(); ++i)
-            q.enqueue(cur->children[i]);
+   std::vector<T> levelOrder() const {
+    std::vector<T> out;
+    if (root_ == nullptr) return out;
 
+    Queue<Node*> q;
+    q.enqueue(root_);
+
+    while (!q.empty()) {
+        Node* cur = q.front();
+        q.dequeue();
+
+        out.push_back(cur->data);
+
+        for (std::size_t i = 0; i < cur->children.size(); ++i) {
+            q.enqueue(cur->children[i]);
         }
     }
+
+    return out;
+}
 
     // ----- Friday ----------------------------------------------------
 
@@ -183,13 +189,22 @@ public:
     //
     // TODO Floor 8 (Friday): write findFrom(root_, value) below.
     std::vector<T> lineage(const T& value) const {
-        std::vector<T> path;
-        const Node* n = findFrom(root_, value);
-        if (n == nullptr) return path;          // not found → empty path
-        for (const Node* p = n; p != nullptr; p = p->parent) path.push_back(p->data);
-        std::reverse(path.begin(), path.end());  // collected leaf→root; flip it
-        return path;
+    std::vector<T> path;
+    std::size_t visited = 0;
+
+    const Node* found = findFrom(root_, value, visited);
+    
+
+    if (found == nullptr) return path;
+
+    for (const Node* p = found; p != nullptr; p = p->parent) {
+        path.push_back(p->data);
     }
+
+    std::reverse(path.begin(), path.end());
+
+    return path;
+}
 
 private:
     Node* root_ = nullptr;
@@ -262,14 +277,15 @@ private:
     //     out.push_back(n->data);
     //     for (std::size_t i = 0; i < n->children.size(); ++i)
     //         preOrderInto(n->children[i], out);
-    static void preOrderInto(const Node* n, std::vector<T>& out) {
-       if (n == nullptr) return;
-       out.push_back(n->data);
+   static void preOrderInto(const Node* n, std::vector<T>& out) {
+    if (n == nullptr) return;
 
-       for (std::size_t i = 0; i < n->children.size(); ++i) {
+    out.push_back(n->data);
+
+    for (std::size_t i = 0; i < n->children.size(); ++i) {
         preOrderInto(n->children[i], out);
-       }
     }
+}
 
     // Recursive search: return the node whose data == value, or nullptr.
     // Check this node, then ask each child's subtree in turn; return the
@@ -281,14 +297,27 @@ private:
     //     for (std::size_t i = 0; i < n->children.size(); ++i)
     //         if (const Node* hit = findFrom(n->children[i], value)) return hit;
     //     return nullptr;
-    static const Node* findFrom(const Node* n, const T& value) {
-        if (n == nullptr) return nullptr;
-        if (n->data == value) return n;
-        for (std::size_t i = 0; i < n->children.size(); ++i) {
-            if (const Node* hit = findFrom(n->children[i], value)) return 
+   
+
+static const Node* findFrom(
+    const Node* n,
+    const T& value,
+    std::size_t& visited
+) {
+    if (n == nullptr) return nullptr;
+
+    ++visited;
+
+    if (n->data == value) return n;
+
+    for (std::size_t i = 0; i < n->children.size(); ++i) {
+        if (const Node* hit = findFrom(n->children[i], value, visited)) {
+            return hit;
         }
-        return nullptr;
     }
+
+    return nullptr;
+}
 };
 
 }  // namespace dungeon

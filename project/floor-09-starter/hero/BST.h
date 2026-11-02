@@ -182,12 +182,16 @@ private:
     //     destroy(n->left);
     //     destroy(n->right);
     //     delete n;
-    static void destroy(Node* n) {
-        if (n == nullptr) return
-        destory(n->left);
-        destroy(n->right);
-        delete n;
+    void destroy(Node* node) {
+    if (node == nullptr) {
+        return;
     }
+
+    destroy(node->left);
+    destroy(node->right);
+
+    delete node;
+}
 
     // Deep-copy the whole subtree. Mirrors destroy(): make this node, then
     // copy each side beneath it. Returns the new subtree (or nullptr).

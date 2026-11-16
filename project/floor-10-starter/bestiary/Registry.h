@@ -159,9 +159,9 @@ public:
     //     auto it = weaknessCounts_.find(w);
     //     return it == weaknessCounts_.end() ? 0 : it->second;
     int countWeakness(const std::string& w) const {
-       auto it = weaknessCounts_.find(w);
-       return it == weaknessCounts_.end() ? 0 : it->second;
-    }
+    auto it = weaknessCounts_.find(w);
+    return it == weaknessCounts_.end() ? 0 : it->second;
+}
 
     // ----- Friday: mutate, staying consistent ------------------------
 

@@ -134,14 +134,8 @@ public:
         std::vector<Chain<Monster>> grown(newBucketCount);
         for (const Chain<Monster>& bucket : buckets_) {
             for (const Monster& m : bucket) {
-                // ===== YOU WRITE (Friday, with rehashIfNeeded #6) =====
-                // Compute m's home in the NEW, bigger array and push it there.
-                // It is one line. Sketch:
-                //     grown[hashKey(m.name) % newBucketCount].push_back(m);
-                // (count_ does NOT change here — rehash moves items, it does not
-                //  add or drop any. The TODO stub below files nothing, so after a
-                //  rehash the table would be EMPTY and self-test phase 6 FAILs.)
-                (void)m;   // TODO Friday — re-file m into grown[...]
+                grown[hashKey(m.name) % newBucketCount].push_back(m);
+
             }
         }
         buckets_.swap(grown);
@@ -241,8 +235,11 @@ public:
     //         if (m.name == name) return &m;
     //     return nullptr;
     const Monster* find(const std::string& name) const {
-        (void)name;
-        return nullptr;   // TODO Wednesday — scan only bucketIndex(name)'s chain
+        std::size_t i = bucketIndex(name);
+        for (const Monster& m : buckets_[i]) {
+            if (m.name == name) return &m;
+        }
+        return nullptr;
     }
 
     // Remove the named monster: compute its bucket, remove the matching item
@@ -259,8 +256,12 @@ public:
     //     if (removed) --count_;
     //     return removed;
     bool erase(const std::string& name) {
-        (void)name;
-        return false;   // TODO Wednesday — eraseFirst from bucketIndex(name)'s chain
+        std::size_t i = bucketIndex(name);
+        bool removed = buckets_[i].eraseFirst(
+            [&](const Monster& m) {return m.name == name;}
+        );
+        if (removed) --count_;
+        return removed;
     }
 
     // ----- Friday: keep the whisper a whisper ------------------------
@@ -277,7 +278,10 @@ public:
     //         rehash(buckets_.size() * 2);
     //     return buckets_.size();
     std::size_t rehashIfNeeded() {
-        return buckets_.size();   // TODO Friday — grow when loadFactor() > kMaxLoadFactor
+       if (loadFactor() > kMaxLoadFactor) {
+        rehash(buckets_.size() * 2);
+       }
+       return buckets_.size();
     }
 
 private:
